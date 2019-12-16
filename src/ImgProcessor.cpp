@@ -47,12 +47,13 @@ Point* ImgProcessor::centroid(int v)
 
 void ImgProcessor::central_Box(int v)
 {
-       int count = 0;
+
 		int sum_x = 0;
 		int sum_y = 0;
+		int count = 0;
 		Point centroid_point = centroid(v);
-		int centroid_x = centroid_point.get_x();
-		int centroid_y = centroid_point.get_y();
+		int x0 = centroid_point.get_x();
+		int y0 = centroid_point.get_y();
 
         std::list<Point>::iterator b;
         for(b=img.get_2D_Image().begin(); b!=img.get_2D_Image().end(); b++)
@@ -60,15 +61,16 @@ void ImgProcessor::central_Box(int v)
             Point p = *b;
 	 		if(p.get_value() == v)
 	 		{
-	 			sum_x = sum_x + pow(p.get_x() - centroid_x,2);
-	 			sum_y = sum_y + pow(p.get_y() - centroid_y,2);
+
+	 			sum_x += pow(p.get_x() - x0,2);
+	 			sum_y += pow(p.get_y() - y0,2);
 	 			count++;
 	 		}
 	 	}
 	 	int sigma_x = sum_x/count;
 	 	int sigma_y = sum_y/count;
-        m_box = Box(centroid_point.get_x() - sigma_x, centroid_point.get_y() - sigma_y,
-                    centroid_point.get_x() + sigma_x, centroid_point.get_y() + sigma_y,
+        m_box = Box(x0 - sigma_x, y0 - sigma_y,
+                    x0 + sigma_x, y0 + sigma_y,
                     m_image);
 
 
